@@ -5,9 +5,9 @@ const connectDB = require("./db");
 // MongoDB connection
 connectDB();
 
-
 // Function to fetch and update crypto data
 const fetchCryptoData = async () => {
+  const updatedData = [];
   const API_URL =
     "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,TRUMP,SOL,DOGE&tsyms=USD";
   const API_KEY =
@@ -36,9 +36,11 @@ const fetchCryptoData = async () => {
       await CryptoCoins.updateOne({ coinSymbol: symbol }, coinData, {
         upsert: true,
       });
+      updatedData.push(coinData);
     }
 
     console.log("CryptoCoins table updated.");
+    return updatedData;
   } catch (error) {
     console.error("Error fetching crypto data:", error.message);
   }
@@ -47,6 +49,7 @@ const fetchCryptoData = async () => {
 setInterval(fetchCryptoData, 1000);
 // Function to store data daily at 11:59 PM in CryptoCoins7Days
 const storeDailyData = async () => {
+  const dailyDataList = [];
   try {
     const coins = await CryptoCoins.find();
 
@@ -58,9 +61,11 @@ const storeDailyData = async () => {
       };
 
       await CryptoCoins7Days.create(dailyData);
+      dailyDataList.push(dailyData);
     }
 
     console.log("Daily data stored in CryptoCoins7Days.");
+    return dailyDataList;
   } catch (error) {
     console.error("Error storing daily data:", error.message);
   }
@@ -73,14 +78,16 @@ module.exports = async (req, res) => {
 
     if (type === "fetchCryptoData") {
       await fetchCryptoData();
-      return res
-        .status(200)
-        .json({ message: "Crypto data updated successfully." });
+      return res.status(200).json({
+        message: "Crypto data updated successfully.",
+        updatedData,
+      });
     } else if (type === "storeDailyData") {
       await storeDailyData();
-      return res
-        .status(200)
-        .json({ message: "Daily data stored successfully." });
+      return res.status(200).json({
+        message: "Daily data stored successfully.",
+        dailyData,
+      });
     } else {
       return res.status(400).json({ message: "Invalid request type." });
     }
