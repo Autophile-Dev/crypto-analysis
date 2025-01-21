@@ -68,7 +68,7 @@ const storeDailyData = async () => {
 
 // API endpoint
 module.exports = async (req, res) => {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     const { type } = req.query;
 
     if (type === "fetchCryptoData") {
