@@ -3,14 +3,16 @@ const mongoose = require("mongoose");
 const CryptoCoins = require("../models/CryptoCoins");
 const CryptoCoins7Days = require("../models/cryptoCoins7Days");
 
-const mongoURI = process.env.MONGO_URI; // Use environment variable for MongoDB URI
 
 // MongoDB connection
 if (!mongoose.connection.readyState) {
-  mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  mongoose.connect(
+    "mongodb+srv://waleedzaheer55:2L3bqwJnO7Ikdweu@business-analysis.gzjgm.mongodb.net/cryptoDB?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
 }
 
 // Function to fetch and update crypto data
