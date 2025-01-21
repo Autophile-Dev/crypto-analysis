@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/crypto.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/crypto",
+        "dest": "api/crypto.js"
+      }
+    ],
+    "crons": [
+    {
+      "path": "/api/crypto",
+      "schedule": "59 23 * * *"
+    }
+  ]
+  }
+  

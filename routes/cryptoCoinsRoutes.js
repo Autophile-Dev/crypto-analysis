@@ -47,7 +47,7 @@ const fetchCryptoData = async () => {
 };
 
 // Run fetchCryptoData every second
-// setInterval(fetchCryptoData, 1000);
+setInterval(fetchCryptoData, 1000);
 
 // Schedule a daily cron job to store data in crypto_coins_7days at 11:59 PM
 cron.schedule("59 23 * * *", async () => {
