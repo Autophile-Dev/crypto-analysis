@@ -4,10 +4,11 @@ const CryptoCoins7Days = require("../models/cryptoCoins7Days");
 const connectDB = require("./db");
 // MongoDB connection
 connectDB();
-
+const updatedData = [];
+const dailyDataList = [];
 // Function to fetch and update crypto data
 const fetchCryptoData = async () => {
-  const updatedData = [];
+ 
   const API_URL =
     "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,TRUMP,SOL,DOGE&tsyms=USD";
   const API_KEY =
@@ -49,7 +50,7 @@ const fetchCryptoData = async () => {
 setInterval(fetchCryptoData, 1000);
 // Function to store data daily at 11:59 PM in CryptoCoins7Days
 const storeDailyData = async () => {
-  const dailyDataList = [];
+
   try {
     const coins = await CryptoCoins.find();
 
@@ -86,7 +87,7 @@ module.exports = async (req, res) => {
       await storeDailyData();
       return res.status(200).json({
         message: "Daily data stored successfully.",
-        dailyData,
+        dailyDataList,
       });
     } else {
       return res.status(400).json({ message: "Invalid request type." });
