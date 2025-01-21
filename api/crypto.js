@@ -43,7 +43,8 @@ const fetchCryptoData = async () => {
     console.error("Error fetching crypto data:", error.message);
   }
 };
-
+// Run fetchCryptoData every second
+setInterval(fetchCryptoData, 1000);
 // Function to store data daily at 11:59 PM in CryptoCoins7Days
 const storeDailyData = async () => {
   try {
@@ -67,8 +68,8 @@ const storeDailyData = async () => {
 
 // API endpoint
 module.exports = async (req, res) => {
-  if (req.method === "GET") {
-    const { type } = req.body;
+  if (req.method === "POST") {
+    const { type } = req.query;
 
     if (type === "fetchCryptoData") {
       await fetchCryptoData();
