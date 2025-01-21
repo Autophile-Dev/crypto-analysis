@@ -1,19 +1,10 @@
 const axios = require("axios");
-const mongoose = require("mongoose");
 const CryptoCoins = require("../models/CryptoCoins");
 const CryptoCoins7Days = require("../models/cryptoCoins7Days");
-
-
+const connectDB = require("./db");
 // MongoDB connection
-if (!mongoose.connection.readyState) {
-  mongoose.connect(
-    "mongodb+srv://waleedzaheer55:2L3bqwJnO7Ikdweu@business-analysis.gzjgm.mongodb.net/cryptoDB?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  );
-}
+connectDB();
+
 
 // Function to fetch and update crypto data
 const fetchCryptoData = async () => {
