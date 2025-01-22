@@ -27,7 +27,7 @@ const fetchCryptoData = async () => {
         coinName: symbol,
         coinSymbol: response.data.RAW[symbol].USD.FROMSYMBOL,
         coinImage: `https://www.cryptocompare.com${response.data.RAW[symbol].USD.IMAGEURL}`,
-        coinPrice: response.data.DISPLAY[symbol].USD.PRICE,
+        coinPrice: response.data.RAW[symbol].USD.PRICE,
         totalVol: response.data.DISPLAY[symbol].USD.TOTALVOLUME24HTO,
         topTierVol: response.data.DISPLAY[symbol].USD.TOTALTOPTIERVOLUME24HTO,
         marketCap: response.data.DISPLAY[symbol].USD.MKTCAP,

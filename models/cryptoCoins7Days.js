@@ -6,7 +6,7 @@ const cryptoCoins7DaysSchema = new mongoose.Schema({
     ref: "crypto_coins",
     required: true,
   },
-  priceAt12Am: String,
+  priceAt12Am: Number,
   date: { type: Date, required: true },
 });
 
