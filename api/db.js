@@ -3,11 +3,7 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://waleedzaheer55:2L3bqwJnO7Ikdweu@business-analysis.gzjgm.mongodb.net/cryptoDB?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
+      "mongodb+srv://waleedzaheer55:2L3bqwJnO7Ikdweu@business-analysis.gzjgm.mongodb.net/cryptoDB?retryWrites=true&w=majority"
     );
     console.log("MongoDB Atlas connected successfully!");
   } catch (error) {

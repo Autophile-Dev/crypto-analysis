@@ -69,9 +69,47 @@ cron.schedule("59 23 * * *", async () => {
     console.error("Error storing daily data:", error.message);
   }
 });
+const fetchAllCoinsData = async () => {
+  try {
+    await fetchCryptoData(); // Update latest data
 
+    const allCoins = await CryptoCoins.find();
+
+    const allCoinsWithHistory = await Promise.all(
+      allCoins.map(async (coin) => {
+        const historicalData = await CryptoCoins7Days.find({
+          cryptoCoinID: coin._id,
+        }).sort({ date: -1 });
+
+        return {
+          ...coin.toObject(),
+          historicalData,
+        };
+      })
+    );
+
+    console.log("Fetched all coins data with historical records.");
+    return allCoinsWithHistory;
+  } catch (error) {
+    console.error("Error fetching all coins data:", error.message);
+    throw error;
+  }
+};
 router.get("/test", (req, res) => {
   res.status(200).json({ message: "Crypto fetching service is running!" });
+});
+router.get("/all-coins", async (req, res) => {
+  try {
+    const allCoinsData = await fetchAllCoinsData();
+    return res.status(200).json({
+      message: "All coins data fetched successfully.",
+      allCoinsData,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching data.", error: error.message });
+  }
 });
 
 module.exports = router;

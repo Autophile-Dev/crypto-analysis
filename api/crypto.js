@@ -72,18 +72,16 @@ const storeDailyData = async () => {
 // Function to fetch all coins' data along with historical records
 const fetchAllCoinsData = async () => {
   try {
-    // Fetch and update latest crypto data first
-    await fetchCryptoData();
+    await fetchCryptoData(); // Update latest data
 
-    // Retrieve all updated coins data
     const allCoins = await CryptoCoins.find();
 
-    // Fetch historical records for each coin
     const allCoinsWithHistory = await Promise.all(
       allCoins.map(async (coin) => {
         const historicalData = await CryptoCoins7Days.find({
           cryptoCoinID: coin._id,
-        });
+        }).sort({ date: -1 });
+
         return {
           ...coin.toObject(),
           historicalData,
@@ -91,7 +89,7 @@ const fetchAllCoinsData = async () => {
       })
     );
 
-    console.log("Fetched all coins data along with historical records.");
+    console.log("Fetched all coins data with historical records.");
     return allCoinsWithHistory;
   } catch (error) {
     console.error("Error fetching all coins data:", error.message);
