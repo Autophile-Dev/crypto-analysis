@@ -8,7 +8,6 @@ const updatedData = [];
 const dailyDataList = [];
 // Function to fetch and update crypto data
 const fetchCryptoData = async () => {
- 
   const API_URL =
     "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,TRUMP,SOL,DOGE&tsyms=USD";
   const API_KEY =
@@ -50,7 +49,6 @@ const fetchCryptoData = async () => {
 setInterval(fetchCryptoData, 1000);
 // Function to store data daily at 11:59 PM in CryptoCoins7Days
 const storeDailyData = async () => {
-
   try {
     const coins = await CryptoCoins.find();
 
@@ -71,6 +69,35 @@ const storeDailyData = async () => {
     console.error("Error storing daily data:", error.message);
   }
 };
+// Function to fetch all coins' data along with historical records
+const fetchAllCoinsData = async () => {
+  try {
+    // Fetch and update latest crypto data first
+    await fetchCryptoData();
+
+    // Retrieve all updated coins data
+    const allCoins = await CryptoCoins.find();
+
+    // Fetch historical records for each coin
+    const allCoinsWithHistory = await Promise.all(
+      allCoins.map(async (coin) => {
+        const historicalData = await CryptoCoins7Days.find({
+          cryptoCoinID: coin._id,
+        });
+        return {
+          ...coin.toObject(),
+          historicalData,
+        };
+      })
+    );
+
+    console.log("Fetched all coins data along with historical records.");
+    return allCoinsWithHistory;
+  } catch (error) {
+    console.error("Error fetching all coins data:", error.message);
+    throw error;
+  }
+};
 
 // API endpoint
 module.exports = async (req, res) => {
@@ -89,6 +116,18 @@ module.exports = async (req, res) => {
         message: "Daily data stored successfully.",
         dailyDataList,
       });
+    } else if (type === "fetchAllCoinsData") {
+      try {
+        const allCoinsData = await fetchAllCoinsData();
+        return res.status(200).json({
+          message: "All coins data fetched successfully.",
+          allCoinsData,
+        });
+      } catch (error) {
+        return res
+          .status(500)
+          .json({ message: "Error fetching data.", error: error.message });
+      }
     } else {
       return res.status(400).json({ message: "Invalid request type." });
     }
