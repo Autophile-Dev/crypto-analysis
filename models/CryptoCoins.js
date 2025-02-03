@@ -5,9 +5,9 @@ const cryptoCoinsSchema = new mongoose.Schema({
   coinSymbol: String,
   coinImage: String,
   coinPrice: Number, // Keep this as Number since it's already a numeric value
-  totalVol: String, // Change to String
-  topTierVol: String, // Change to String
-  marketCap: String, // Change to String
+  totalVol: Number, // Change to String
+  topTierVol: Number, // Change to String
+  marketCap: Number, // Change to String
   _24HPCT: Number, // Keep this as Number
 });
 
